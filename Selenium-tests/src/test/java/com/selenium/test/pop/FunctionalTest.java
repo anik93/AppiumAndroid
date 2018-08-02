@@ -8,10 +8,15 @@ import com.selenium.exceptions.ProductNotFoundException;
 import com.selenium.exceptions.SortNotFoundException;
 import com.selenium.test.page.ArticlePage;
 import com.selenium.test.page.HomePage;
+import com.selenium.tests.activity.AccountActivity;
 import com.selenium.tests.activity.MainActivity;
+import com.selenium.tests.activity.ProductActivity;
+import com.selenium.tests.activity.RegisterActivity;
 import com.selenium.tests.activity.SearchActivity;
 import com.selenium.tests.activity.SearchListActivity;
+import com.selenium.tests.activity.ShoppingCartActivity;
 import com.selenium.tests.activity.SortActivity;
+import com.selenium.tests.activity.TitlePopUpActivity;
 
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -73,23 +78,36 @@ public class FunctionalTest implements En {
 			initWebDriver(webDriverType, "https://github.com/");
 			// articlePage = new ArticlePage(driver);
 			MainActivity mainActivity = new MainActivity(driver);
-			SearchActivity searchActivity = mainActivity.clickSearchButton();
-			searchActivity = searchActivity.setTextIntoSearchInput("samsung");
-			SearchListActivity searchListActivity = null;
-			try {
-				searchListActivity = searchActivity.clickOnSearchingText("samsung");
-			} catch (ProductNotFoundException e) {
-				System.out.println("product not found " + e.getName());
-			}
-			SortActivity sortActivity = searchListActivity.clickOnSortButton();
-			try {
-				searchListActivity = sortActivity.selectSortType("Price: Low to High");
-			} catch (SortNotFoundException e) {
-				System.out.println("sort not found " + e.getName());
-			}
-			searchListActivity = searchListActivity.scrollDown();
-			searchListActivity.getPrices().forEach(x -> System.out.println(x));
-			assertThat(searchListActivity.getPrices()).isSorted();
+			AccountActivity accountActivity = mainActivity.clickOnAccountInMenu();
+			RegisterActivity registerActivity = accountActivity.clickOnRegisterButton();
+			TitlePopUpActivity titlePopUpActivity = registerActivity.clickOnTitleSelect();
+			registerActivity = titlePopUpActivity.selectTitle("Miss");
+			System.out.println(registerActivity.getTitleText());
+			System.out.println(registerActivity.getFirstHeader());
+			// SearchActivity searchActivity = mainActivity.clickSearchButton();
+			// searchActivity = searchActivity.setTextIntoSearchInput("tea");
+			// SearchListActivity searchListActivity = null;
+			// try {
+			// searchListActivity = searchActivity.clickOnSearchingText("tea");
+			// } catch (ProductNotFoundException e) {
+			// System.out.println("product not found " + e.getName());
+			// }
+			// ProductActivity productActivity = searchListActivity.selectProducy("HK$218");
+			// productActivity = productActivity.addToCart();
+			// ShoppingCartActivity shoppingCartActivity =
+			// productActivity.clickToGoToCartButton();
+			// shoppingCartActivity.getSub();
+			// shoppingCartActivity.getTotal();
+
+			// SortActivity sortActivity = searchListActivity.clickOnSortButton();
+			// try {
+			// searchListActivity = sortActivity.selectSortType("Price: Low to High");
+			// } catch (SortNotFoundException e) {
+			// System.out.println("sort not found " + e.getName());
+			// }
+			// searchListActivity = searchListActivity.scrollDown();
+			// searchListActivity.getPrices().forEach(x -> System.out.println(x));
+			// assertThat(searchListActivity.getPrices()).isSorted();
 		});
 	}
 

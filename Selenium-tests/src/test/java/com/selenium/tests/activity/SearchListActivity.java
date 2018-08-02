@@ -29,7 +29,7 @@ public class SearchListActivity extends PageObject {
 	public SearchListActivity(WebDriver driver) {
 		super(driver);
 		try {
-			Thread.sleep(3000);
+			Thread.sleep(5000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -53,6 +53,11 @@ public class SearchListActivity extends PageObject {
 	public List<BigInteger> getPrices() {
 		return priceList.stream().map(x -> new BigInteger(x.getText().split("\\$")[1].replaceAll(",", "")))
 				.collect(Collectors.toList());
+	}
+
+	public ProductActivity selectProducy(String string) {
+		priceList.get(0).click();
+		return new ProductActivity(driver);
 	}
 
 }

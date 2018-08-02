@@ -8,12 +8,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.selenium.exceptions.ProductNotFoundException;
-import com.selenium.test.pop.ActivityObject;
 import com.selenium.test.pop.PageObject;
-
-import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.android.AndroidElement;
-import io.appium.java_client.pagefactory.AndroidFindBy;
 
 public class SearchActivity extends PageObject {
 
@@ -28,6 +23,7 @@ public class SearchActivity extends PageObject {
 
 	public SearchActivity(WebDriver driver) {
 		super(driver);
+		webDriverWait.until(ExpectedConditions.visibilityOf(searchInput));
 	}
 
 	public SearchActivity setTextIntoSearchInput(String text) {
@@ -36,11 +32,13 @@ public class SearchActivity extends PageObject {
 	}
 
 	public SearchListActivity clickOnSearchingText(String text) throws ProductNotFoundException {
-		webDriverWait.until(ExpectedConditions.visibilityOf(searchResault));
-		return searchResaultList.stream().filter(element -> element.getText().equals(text)).findFirst().map(resault -> {
-			resault.click();
-			return new SearchListActivity(driver);
-		}).orElseThrow(() -> new ProductNotFoundException(text));
+		webDriverWait.until(ExpectedConditions.visibilityOfAllElements(searchResaultList));
+		searchResaultList.forEach(x -> System.out.println("$$$$$$$$$$$$$$$$$$$$$$ " + x.getText()));
+		return searchResaultList.stream().filter(element -> element.getText().contains(text)).findFirst()
+				.map(resault -> {
+					resault.click();
+					return new SearchListActivity(driver);
+				}).orElseThrow(() -> new ProductNotFoundException(text));
 	}
 
 }
